@@ -1,15 +1,15 @@
 # DeCo Backend - Step-by-Step Setup Guide
 
 ## Introduction
-This documentation provides a step-by-step guide to setting up the **DeCo Backend** using **Node.js (Express) or FastAPI** with WebSockets. Follow these steps to configure, install dependencies, and run the backend server locally.
+This documentation provides a step-by-step guide to setting up the **DeCo Backend** using **Node.js (Express)** and deploying it for **free** on **Vercel**. Follow these steps to configure, install dependencies, and run the backend server online.
 
 ---
 
 ## **🛠️ Step 1: Install Prerequisites**
 Before proceeding, ensure you have the following installed:
 - ✅ **Node.js** (for Express backend) → [Download](https://nodejs.org/)
-- ✅ **Python 3.8+** (for FastAPI backend) → [Download](https://www.python.org/downloads/)
-- ✅ **Docker** (optional, for containerization) → [Download](https://www.docker.com/)
+- ✅ **Vercel CLI** (for deployment) → [Install](https://vercel.com/docs/cli)
+- ✅ **MongoDB Atlas (Free Tier)** (for database) → [Sign Up](https://www.mongodb.com/cloud/atlas)
 
 ---
 
@@ -23,21 +23,9 @@ cd backend
 ---
 
 ## **📦 Step 3: Install Dependencies**
-
-### For **Node.js (Express) Backend**
 Run:
 ```bash
 npm install
-```
-
-### For **FastAPI Backend**
-Create a virtual environment and install dependencies:
-```bash
-python -m venv venv
-source venv/bin/activate  # (Mac/Linux)
-venv\Scripts\activate  # (Windows)
-
-pip install -r requirements.txt
 ```
 
 ---
@@ -46,41 +34,40 @@ pip install -r requirements.txt
 Create a `.env` file inside the backend folder and configure the required variables:
 ```
 PORT=5000
-DATABASE_URL=mongodb://localhost:27017/deco
+DATABASE_URL=mongodb+srv://your_mongo_connection_string
 JWT_SECRET=your-secret-key
 ```
-For FastAPI, create a `.env` file and update settings accordingly.
+Use **MongoDB Atlas Free Tier** for a cloud database.
 
 ---
 
-## **🚀 Step 5: Start the Backend Server**
+## **🚀 Step 5: Deploy to Vercel (Free Hosting)**
 
-### **For Node.js (Express) Backend**
+1️⃣ **Install Vercel CLI**  
 ```bash
-npm start
-```
-Or, for development mode (with hot reload):
-```bash
-npm run dev
+npm install -g vercel
 ```
 
-### **For FastAPI Backend**
+2️⃣ **Login to Vercel**  
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+vercel login
 ```
+
+3️⃣ **Deploy Backend**  
+```bash
+vercel --prod
+```
+
+4️⃣ **Get Deployed URL**  
+After deployment, Vercel will provide a **free HTTPS URL** (e.g., `https://deco-backend.vercel.app`).
 
 ---
 
 ## **🔗 Step 6: Test API Endpoints**
 Use **Postman** or `curl` to check if the server is running:
 ```bash
-curl http://localhost:5000/api/health
+curl https://deco-backend.vercel.app/api/health
 ```
-For FastAPI:
-```bash
-curl http://localhost:8000/docs
-```
-FastAPI provides an interactive API at `http://localhost:8000/docs` 🎯
 
 ---
 
@@ -104,37 +91,22 @@ io.on("connection", (socket) => {
 });
 ```
 
-### **FastAPI WebSockets Example**
-Install `fastapi-sockets`:
-```bash
-pip install websockets
-```
-Modify `main.py`:
-```python
-from fastapi import FastAPI, WebSocket
-
-app = FastAPI()
-
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    while True:
-        data = await websocket.receive_text()
-        await websocket.send_text(f"Message received: {data}")
-```
-
 ---
 
-## **✅ Step 8: Deploy (Optional)**
-Deploy using **Docker**:
+## **✅ Step 8: Code Execution Engine Deployment (Optional)**
+The **Code Execution Engine** requires **Docker** and should be deployed separately (Vercel does not support it). Use **Fly.io (Free Tier)**:
 ```bash
-docker build -t deco-backend .
-docker run -p 5000:5000 deco-backend
+fly launch
+fly deploy
 ```
-Or use **Heroku, Vercel, or AWS** for hosting.
+For a local test, run:
+```bash
+docker build -t deco-execution .
+docker run -p 5000:5000 deco-execution
+```
 
 ---
 
 ## 🎉 Conclusion
-Now your **DeCo Backend** is up and running! 🚀 Let us know if you need any help setting it up. Happy coding! 👨‍💻👩‍💻
+Now your **DeCo Backend** is deployed and running on **Vercel for free!** 🚀 Let us know if you need any help setting it up. Happy coding! 👨‍💻👩‍💻
 
